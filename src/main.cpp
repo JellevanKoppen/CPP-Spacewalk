@@ -5,6 +5,9 @@ using namespace std;
 
 int main(){
   Board board(2);
+  //board.fase1();
   board.setSpaceships();
-  board.printLocations();
+  //board.printSpaceshipLocations();
+  board.getLocations();
+  board.print();
 }

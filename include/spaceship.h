@@ -1,3 +1,6 @@
+#ifndef SPACESHIP_H
+#define SPACESHIP_H
+
 class Spaceship{
   public:
     void setSize(int _size);
@@ -6,7 +9,7 @@ class Spaceship{
     int getLocation();
     int getID();
     int getSize();
-    virtual ~Spaceship();
+    ~Spaceship();
     Spaceship(int _size, int _id);
     Spaceship();
     void sayHi();
@@ -16,3 +19,4 @@ class Spaceship{
     char const* sizeText;
     int id;
 };
+#endif

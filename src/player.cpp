@@ -12,18 +12,23 @@ Player::Player(char const* _name){
   createSpaceships();
 }
 
-Player::Player(){
+Player::Player(int _startID){
+  startID = _startID;
   nOfSpaceships = 9;
   name = "Undefined";
   cout << "Hey " << name << endl;
   cout << "Creating spaceships for " << name << endl;
   spaceshipArray = (Spaceship*) calloc(sizeof(Spaceship), 9);
-  spaceshipArray=new Spaceship[9];
+  spaceshipArray= new Spaceship[9];
   createSpaceships();
 }
 
 void Player::printName(){
   cout << name << endl;
+}
+
+int Player::getSpaceshipID(int index){
+  return spaceshipArray[index].getID();
 }
 
 int Player::getNOfSpaceships(){
@@ -32,6 +37,15 @@ int Player::getNOfSpaceships(){
 
 int Player::getSpaceshipLocation(int spaceshipID){
   return spaceshipArray[spaceshipID].getLocation();
+}
+
+int Player::getSpaceshipSize(int spaceshipID){
+  for (int i = 0; i < 9; i++){
+    if(spaceshipArray[i].getID() == spaceshipID){
+      return spaceshipArray[i].getSize();
+    }
+  }
+  return -1;
 }
 
 void Player::moveSpaceship(int spaceshipID, int location){
@@ -50,17 +64,17 @@ int Player::getFiches(){
 void Player::createSpaceships(){
   //Create 3x3 sizes of spaceships
   for (int i=0; i<3; i++){
-    spaceshipArray[i].setID(i+1);
+    spaceshipArray[i].setID(i+startID);
     spaceshipArray[i].setSize(1);
     spaceshipArray[i].sayHi();
   }
   for (int i=3; i<6; i++){
-    spaceshipArray[i].setID(i+1);
+    spaceshipArray[i].setID(i+startID);
     spaceshipArray[i].setSize(2);
     spaceshipArray[i].sayHi();
   }
   for (int i=6; i<9; i++){
-    spaceshipArray[i].setID(i+1);
+    spaceshipArray[i].setID(i+startID);
     spaceshipArray[i].setSize(3);
     spaceshipArray[i].sayHi();
   }
