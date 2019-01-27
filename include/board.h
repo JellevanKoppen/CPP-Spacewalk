@@ -9,7 +9,8 @@ class Board{
     void setBodies();
     void createBoard();
     void fase1();
-    void setSpaceships();
+    void setSpaceship(int spaceshipID);
+    int pickSpaceship();
     void createPlayers(int _players);
     void setBodies(int _bodies);
     void printLocations();
@@ -22,9 +23,12 @@ class Board{
     Player player1;
     Player player2;
     int nOfSpaceshipsOnBoard;
+    bool fase1State;
     int bodies;
+    int turn;
     int players;
-    std::string *locationArray;
+    std::string *locationArrayP1;
+    std::string *locationArrayP2;
     Body *bodyArray;
 };
 #endif

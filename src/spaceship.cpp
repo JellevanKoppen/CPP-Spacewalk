@@ -13,6 +13,14 @@ Spaceship::Spaceship(){
   id = -1;
 }
 
+void Spaceship::setStatus(bool _onBoard){
+  onBoard = _onBoard;
+}
+
+bool Spaceship::getStatus(){
+  return onBoard;
+}
+
 void Spaceship::setLocation(int _location){
   location = _location;
 }

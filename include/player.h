@@ -10,7 +10,11 @@ class Player {
     void moveSpaceship(int spaceshipID, int location);
     int getSpaceshipLocation(int spaceshipID);
     int getSpaceshipSize(int spaceshipID);
+    bool getSpaceshipStatus(int spaceshipID);
+    int getAvailableSpaceship(int size);
+    void setSpaceshipStatus(bool state, int spaceshipID);
     int getNOfSpaceships();
+    int getNrOfUnplacedSpaceships(int size);
     void createSpaceships();
     void setFiches(int _fiches);
     int getFiches();

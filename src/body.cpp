@@ -56,7 +56,7 @@ bool Body::spaceshipOnPlanet(int _spaceshipID){
 }
 
 void Body::sayHi(){
-  if(id < 0){
+  if(id <= 0){
     cout << "Hi i'm Hole:" << id << endl;
   } else {
     cout << "Hi i'm Planet:" << id << endl;

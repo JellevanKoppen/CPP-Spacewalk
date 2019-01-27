@@ -9,6 +9,8 @@ class Spaceship{
     int getLocation();
     int getID();
     int getSize();
+    void setStatus(bool _onBoard);
+    bool getStatus();
     ~Spaceship();
     Spaceship(int _size, int _id);
     Spaceship();
@@ -17,6 +19,7 @@ class Spaceship{
     int size;
     int location;
     char const* sizeText;
+    bool onBoard;
     int id;
 };
 #endif
