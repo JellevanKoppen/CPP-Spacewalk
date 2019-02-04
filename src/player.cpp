@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Player::Player(char const* _name){
+Player::Player(string _name){
   name = _name;
   nOfSpaceships = 9;
   fiches = 5;
@@ -109,11 +109,12 @@ void Player::createSpaceships(){
   }
 }
 
-void Player::setName(char const* _name){
+void Player::setName(string _name){
   name = _name;
+  cout << "Hey "<< name << "!" << endl;
 }
 
-char const* Player::getName(){
+string Player::getName(){
   return name;
 }
 

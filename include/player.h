@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <string>
 #include "spaceship.h"
 
 class Player {
@@ -19,15 +20,15 @@ class Player {
     void setFiches(int _fiches);
     int getFiches();
     int getSpaceshipID(int index);
-    void setName(char const* _name);
-    char const* getName();
+    void setName(std::string _name);
+    std::string getName();
     void printName();
-    Player(char const* _name);
+    Player(std::string _name);
     Player(int _startID);
     Spaceship *spaceshipArray;
 
   private:
-    char const* name;
+    std::string name;
     int startID;
     int fiches;
     int nOfSpaceships;

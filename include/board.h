@@ -3,6 +3,7 @@
 
 #include "body.h"
 #include "player.h"
+#include <string>
 
 class Board{
   public:
@@ -11,6 +12,9 @@ class Board{
     void fase1();
     void setSpaceship(int spaceshipID);
     int pickSpaceship();
+    int pickPlanet(int _size);
+    std::string getPlayerName(int player);
+    void printFase1Information(int player);
     void createPlayers(int _players);
     void setBodies(int _bodies);
     void printLocations();
@@ -18,7 +22,8 @@ class Board{
     void getLocations();
     Board(int _players);
     ~Board();
-    void print();
+    void printBoard();
+    void printStats();
   private:
     Player player1;
     Player player2;

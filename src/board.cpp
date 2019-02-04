@@ -34,13 +34,15 @@ void Board::createPlayers(int _players){
   cout << "Creating Players" << endl;
   if (_players == 2){
     string name1;
-    cout << "Player1 name: ";
-    cin >> name1;
+    //cout << "Player1 name: ";
+    name1 = "Speler1";
+    //cin >> name1;
     string name2;
-    cout << "Player2 name: ";
-    cin >> name2;
-    player1.setName(name1.c_str());
-    player2.setName(name2.c_str());
+    //cout << "Player2 name: ";
+    //cin >> name2;
+    name2 = "Speler2";
+    player1.setName(name1);
+    player2.setName(name2);
   }
 }
 
@@ -70,11 +72,71 @@ void Board::createBoard(){
   }
 }
 
-void printFase1Information(int player){
-  cout << "It's player" << player << "'s turn.." << endl;
+void Board::printFase1Information(int player){
+  string playerName = getPlayerName(player);
+  cout << "It's " << playerName << "'s turn.." << endl;
   cout << "Select a spaceship by typing it's size: L(arge),M(edium),S(mall)" << endl;
-  cout << "Next name a planet to place the spaceship on: (Numbers: 1-16)" << endl;
+  //cout << "Next name a planet to place the spaceship on: (Numbers: 1-16)" << endl;
 }
+
+ int Board::pickPlanet(int _size){
+   printBoard();  // Laat het bord zien
+   cout << "Next name a planet to place the spaceship on: (Numbers: 1-16)" << endl;
+   int answer = -1;
+   int input;
+   int index;
+   bool available;
+   while (answer == -1){
+     cout << "Select a planet: ";
+     cin >> input;
+     cout << endl;
+     if(!cin.good()){
+       cin.clear();
+       continue;
+     }
+
+     if(input < 1 || input > 16 ){
+       continue;
+     }
+
+     for(int i = 0; i < bodies; i++){
+       if(bodyArray[i].getID() == input){
+        index = i;
+       }
+     }
+
+     if(turn == 1){
+       vector<int> spaceshipIDS = bodyArray[index].getSpaceships();
+       int spaceshipIDSSize = spaceshipIDS.size();
+       int size;
+       available = true;
+       for (int i = 0; i < spaceshipIDSSize; i++){
+         if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+           size = player1.getSpaceshipSize(spaceshipIDS[i]);
+           if (size == _size){
+             available = false;
+           }
+         }
+       }
+     } else if (turn == 2){
+       vector<int> spaceshipIDS = bodyArray[index].getSpaceships();
+       int spaceshipIDSSize = spaceshipIDS.size();
+       int size;
+       available = true;
+       for (int i = 0; i < spaceshipIDSSize; i++){
+         if(spaceshipIDS[i] > 19){
+           size = player2.getSpaceshipSize(spaceshipIDS[i]);
+           if (size == _size){
+             available = false;
+           }
+         }
+       }
+     }
+     if (available){
+       return input;
+     }
+   }
+ }
 
 int Board::pickSpaceship(){
   string size;
@@ -119,17 +181,23 @@ int Board::pickSpaceship(){
 }
 
 void Board::setSpaceship(int spaceshipID){
-  // Print all available planets
+  int size = 0;
   if(turn == 1){
     player1.setSpaceshipStatus(true, spaceshipID);
+    size = player1.getSpaceshipSize(spaceshipID);
   } else if (turn == 2){
     player2.setSpaceshipStatus(true, spaceshipID);
+    size = player2.getSpaceshipSize(spaceshipID);
   }
-  cout << "TODO: KIES PLANEET!" << endl;
   // Check op elke planeet of spaceship id binnen player range en van die size op planeet staat
-  // Zo niet: Geef weer als optie
-  // Zo wel : Geef niet weer (of doorgekruist o.i.d.)
+  int planetID = pickPlanet(size);
 
+  // zet spaceship spaceshipID op planeet planetID
+  for (int i = 0; i < bodies; i++){
+    if (bodyArray[i].getID() == planetID){
+      bodyArray[i].setSpaceshipOnPlanetVector(spaceshipID);
+    }
+  }
 }
 
 // Fase 1: Players place spacehips on board turn for turn.
@@ -157,7 +225,6 @@ void Board::fase1(){
     int spaceshipID = pickSpaceship();
     // Laat speler daarna kiezen op welke planeet dit ruimteschip komt
     setSpaceship(spaceshipID);
-    cout << spaceshipID << endl;
     if(turn == 1){
       turn = 2;
     } else if(turn == 2){
@@ -188,12 +255,11 @@ void Board::getLocations(){
     int smallSizeP2 = 0, mediumSizeP2 = 0, largeSizeP2 = 0;
     vector<int> spaceshipIDS = bodyArray[i].getSpaceships();
     int spaceshipIDSSize = spaceshipIDS.size();
-    cout << spaceshipIDSSize << endl;
     for (int i = 0; i < spaceshipIDSSize; i++){
       if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
         player = 1;
         size = player1.getSpaceshipSize(spaceshipIDS[i]);
-      } else if (i > 19){
+      } else if (spaceshipIDS[i] > 19){
         player = 2;
         size = player2.getSpaceshipSize(spaceshipIDS[i]);
       } else {
@@ -226,13 +292,25 @@ void Board::setBodies(int _bodies){
   bodies = _bodies;
 }
 
+string Board::getPlayerName(int player){
+  if (player == 1){
+    string name =  player1.getName();
+    return name;
+  } else if(player == 2){
+    string name =  player2.getName();
+    return name;
+  } else {
+    cout << "getPlayerName Error: Player not found!" << endl;
+  }
+}
+
 Board::~Board(){
   delete[] bodyArray;
   cout << "Board destroyed" << endl;
 }
 
-void Board::print(){
-  cout << string(50, '\n');
+void Board::printBoard(){
+  getLocations();
   cout << "Player1:"<< locationArrayP1[1] << locationArrayP1[2] << locationArrayP1[3] << locationArrayP1[4] << locationArrayP1[5] << locationArrayP1[6] << locationArrayP1[7] << locationArrayP1[8] << endl;
   cout << "Player2:"<< locationArrayP2[1] << locationArrayP2[2] << locationArrayP2[3] << locationArrayP2[4] << locationArrayP2[5] << locationArrayP2[6] << locationArrayP2[7] << locationArrayP2[8] << endl;
   cout << "" << endl;
@@ -249,12 +327,15 @@ void Board::print(){
   cout << "Player1:"<< locationArrayP1[17] << locationArrayP1[16] << locationArrayP1[15] << locationArrayP1[14] << locationArrayP1[13] << locationArrayP1[12] << locationArrayP1[11] << locationArrayP1[10] << endl;
   cout << "Player2:"<< locationArrayP2[17] << locationArrayP2[16] << locationArrayP2[15] << locationArrayP2[14] << locationArrayP2[13] << locationArrayP2[12] << locationArrayP2[11] << locationArrayP2[10] << endl;
   cout << "" << endl;
+}
+
+void Board::printStats(){
   cout << "Player 1" << endl;
-  cout << "Fleet: " << player1.getNOfSpaceships() << endl;
-  cout << "Space Coins: " << player1.getFiches() << endl;
-  cout << "" << endl;
-  cout << "Player 2" << endl;
-  cout << "Fleet: " << player2.getNOfSpaceships() << endl;
-  cout << "Space Coins: " << player2.getFiches() << endl;
-  cout << "" << endl;
-  }
+    cout << "Fleet: " << player1.getNOfSpaceships() << endl;
+    cout << "Space Coins: " << player1.getFiches() << endl;
+    cout << "" << endl;
+    cout << "Player 2" << endl;
+    cout << "Fleet: " << player2.getNOfSpaceships() << endl;
+    cout << "Space Coins: " << player2.getFiches() << endl;
+    cout << "" << endl;
+}
