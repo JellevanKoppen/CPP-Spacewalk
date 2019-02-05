@@ -10,11 +10,17 @@ class Board{
     void setBodies();
     void createBoard();
     void fase1();
+    void fase2();
     void setSpaceship(int spaceshipID);
     int pickSpaceship();
     int pickPlanet(int _size);
+    int selectPlanet();
+    int makeDecisionForPlayer();
+    void moveSpaceships(int planetID);
+    void moveSpaceship(int planetID, int spaceshipID);
     std::string getPlayerName(int player);
     void printFase1Information(int player);
+    void printFase2Information(int player);
     void createPlayers(int _players);
     void setBodies(int _bodies);
     void printLocations();
@@ -29,6 +35,7 @@ class Board{
     Player player2;
     int nOfSpaceshipsOnBoard;
     bool fase1State;
+    bool fase2State;
     int bodies;
     int turn;
     int players;

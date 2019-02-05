@@ -1,6 +1,7 @@
 #ifndef BODY_H
 #define BODY_H
 #include <vector>
+#include <algorithm>
 
 class Body{
   public:
@@ -9,6 +10,7 @@ class Body{
     int getID();
     void setSpaceshipOnPlanet(int _spaceshipID);
     void setSpaceshipOnPlanetVector(int _spaceshipID);
+    void removeSpaceshipOffPlanetVector(int _spaceshipID);
     bool spaceshipOnPlanet(int _spaceshipID);
     void createSpaceStation(int _spaceships);
     void printSpaceships();

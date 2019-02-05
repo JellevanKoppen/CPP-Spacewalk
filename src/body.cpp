@@ -36,6 +36,10 @@ void Body::setSpaceshipOnPlanetVector(int _spaceshipID){
   spaceshipVector.push_back(_spaceshipID);
 }
 
+void Body::removeSpaceshipOffPlanetVector(int _spaceshipID){
+  spaceshipVector.erase(remove(spaceshipVector.begin(), spaceshipVector.end(), _spaceshipID), spaceshipVector.end());
+}
+
 void Body::printSpaceships(){
   for(int i = 0; i < spaceshipVector.size(); i++){
     cout << spaceshipVector[i] << endl;
