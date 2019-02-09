@@ -91,6 +91,7 @@ void Board::printFase1Information(int player){
      cout << endl;
      if(!cin.good()){
        cin.clear();
+       cin.ignore(INT8_MAX, '\n');
        continue;
      }
 
