@@ -11,6 +11,7 @@ class Board{
     void createBoard();
     void fase1();
     void fase2();
+    void clear();
     void setSpaceship(int spaceshipID);
     int pickSpaceship();
     int pickPlanet(int _size);
@@ -38,9 +39,11 @@ class Board{
     Player player2;
     int nOfSpaceshipsOnBoard;
     bool fase1State;
+    bool hopped;
     bool fase2State;
     int bodies;
     int turn;
+    int previousturn;
     int players;
     std::string *locationArrayP1;
     std::string *locationArrayP2;

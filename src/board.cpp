@@ -10,7 +10,9 @@ Board::Board(int _players) : player1(10), player2(20) {
   cout << "Generating board" << endl;
   fase1State = true;
   fase2State = false;
+  hopped = false;
   turn = 1;
+  previousturn = turn;
   players = _players;
   nOfSpaceshipsOnBoard = players * 9;
   if (players == 2){
@@ -69,6 +71,10 @@ void Board::createBoard(){
     bodyArray[i].createSpaceStation(nOfSpaceshipsOnBoard);
     bodyArray[i].sayHi();
   }
+}
+
+void Board::clear(){
+  system("clear");
 }
 
 void Board::printFase1Information(int player){
@@ -380,6 +386,7 @@ int Board::makeDecisionForPlayer(){
 }
 
 void Board::moveSpaceship(int planetID, int spaceshipID){
+  // Move the spaceships on the planet. planetID -9 and -17 = black hole.
   for (int i = 0; i < bodies; i++){
     if (bodyArray[i].getID() == planetID){
       cout << "Setting spaceship " << spaceshipID << " on planet: " << bodyArray[i].getID() << endl;
@@ -448,6 +455,7 @@ void Board::moveSpaceships(int planetID){
       }
     }
   }
+  // LARGE
   if(largeSizeP1 > 0 && largeSizeP2 > 0){
     while(largeSizeP1 > 0 && largeSizeP2 > 0){
       // Kies welke grote spaceship als eerste 1 plek mag verschuiven
@@ -457,16 +465,22 @@ void Board::moveSpaceships(int planetID){
       if(decision == 1){
         // Move one of player 1's large Spaceships
         for (int i = 0; i < spaceshipIDSSize; i++){
-          //Check elke planeet voor een spaceship
+          //Check de planeet voor een spaceship behorend bij speler 1
           if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
             if(player1.getSpaceshipSize(spaceshipIDS[i]) == 3){
               toMove = spaceshipIDS[i];
-              //cout << "To Move: " << toMove << endl;
               break;
             }
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
         moveSpaceship(bodyArray[index+steps].getID(), toMove);
         steps++;
         largeSizeP1--;
@@ -482,14 +496,285 @@ void Board::moveSpaceships(int planetID){
             }
           }
         }
-        cout << "PlanetID: " << bodyArray[index+steps].getID() << endl;
-        cout << "To Move: " << toMove << endl;
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
-        cout << "Got here!" << endl;
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
         moveSpaceship(bodyArray[index+steps].getID(), toMove);
-        cout << "Got here! too" << endl;
         steps++;
         largeSizeP2--;
+      }
+    }
+  }
+  if(largeSizeP1 > 0 || largeSizeP2 > 0) {
+    int toMove;
+    // Move the ship!
+    if(largeSizeP1 > 0){
+      while(largeSizeP1 > 0){
+        // move largeSizeP1
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+            if(player1.getSpaceshipSize(spaceshipIDS[i]) == 3){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        largeSizeP1--;
+      }
+    } else if (largeSizeP2 > 0){
+      while(largeSizeP2 > 0){
+        // Move largesizeP2
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          if(spaceshipIDS[i] > 19){
+            if(player2.getSpaceshipSize(spaceshipIDS[i]) == 3){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        largeSizeP2--;
+      }
+    }
+  }
+
+  // Medium
+
+  if(mediumSizeP1 > 0 && mediumSizeP2 > 0){
+    while(mediumSizeP1 > 0 && mediumSizeP2 > 0){
+      // Kies welke grote spaceship als eerste 1 plek mag verschuiven
+      cout << "Whose medium-sized spaceship do you want to move first?" << endl;
+      int decision = makeDecisionForPlayer();
+      int toMove;
+      if(decision == 1){
+        // Move one of player 1's medium-sized Spaceships
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          //Check de planeet voor een medium spaceship
+          if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+            if(player1.getSpaceshipSize(spaceshipIDS[i]) == 2){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        mediumSizeP1--;
+      }
+      if(decision == 2){
+        // Move one of player 2's medium spaceships
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          //Check elke planeet voor een spaceship
+          if(spaceshipIDS[i] > 19){
+            if(player2.getSpaceshipSize(spaceshipIDS[i]) == 2){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        mediumSizeP2--;
+      }
+    }
+  }
+  if(mediumSizeP1 > 0 || mediumSizeP2 > 0) {
+    int toMove;
+    // Move the ship!
+    if(mediumSizeP1 > 0){
+      while(mediumSizeP1 > 0){
+        // move mediumSizeP1
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+            if(player1.getSpaceshipSize(spaceshipIDS[i]) == 2){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        mediumSizeP1--;
+      }
+    } else if (mediumSizeP2 > 0){
+      // Move mediumSizeP2
+      while(mediumSizeP2 > 0){
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          if(spaceshipIDS[i] > 19){
+            if(player2.getSpaceshipSize(spaceshipIDS[i]) == 2){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        mediumSizeP2--;
+      }
+    }
+  }
+
+  // SMALL:
+
+  if(smallSizeP1 > 0 && smallSizeP2 > 0){
+    while(smallSizeP1 > 0 && smallSizeP2 > 0){
+      // Kies welke kleine spaceship als eerste 1 plek mag verschuiven
+      cout << "Whose small spaceship do you want to move first?" << endl;
+      int decision = makeDecisionForPlayer();
+      int toMove;
+      if(decision == 1){
+        // Move one of player 1's small Spaceships
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          //Check de planeet voor een small spaceship
+          if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+            if(player1.getSpaceshipSize(spaceshipIDS[i]) == 1){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        // ERROR: This does not remove it from the current vector!!!!
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        smallSizeP1--;
+      }
+      if(decision == 2){
+        // Move one of player 2's small spaceships
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          //Check de planeet voor een small spaceship
+          if(spaceshipIDS[i] > 19){
+            if(player2.getSpaceshipSize(spaceshipIDS[i]) == 1){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        smallSizeP2--;
+      }
+    }
+  }
+  if(smallSizeP1 > 0 || smallSizeP2 > 0) {
+    int toMove;
+    // Move the ship!
+    if(smallSizeP1 > 0){
+      while(smallSizeP1 > 0){
+        // move smallSizeP1
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+            if(player1.getSpaceshipSize(spaceshipIDS[i]) == 1){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        smallSizeP1--;
+      }
+    } else if (smallSizeP2 > 0){
+      while(smallSizeP2 > 0){
+        // Move smallSizeP2
+        for (int i = 0; i < spaceshipIDSSize; i++){
+          if(spaceshipIDS[i] > 19){
+            if(player2.getSpaceshipSize(spaceshipIDS[i]) == 1){
+              toMove = spaceshipIDS[i];
+              break;
+            }
+          }
+        }
+        bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        // Test
+        if(index+steps > 17){
+          cout << "Steps was: " << steps << endl;
+          steps = -16;
+          cout << "Steps is now: " << steps << endl;
+          cout << "So index+steps =" << index+steps << endl;
+        }
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        steps++;
+        smallSizeP2--;
       }
     }
   }
@@ -654,6 +939,7 @@ Board::~Board(){
 
 void Board::printBoard(){
   getLocations();
+  cout << "" << endl;
   cout << "Player1:"<< locationArrayP1[1] << locationArrayP1[2] << locationArrayP1[3] << locationArrayP1[4] << locationArrayP1[5] << locationArrayP1[6] << locationArrayP1[7] << locationArrayP1[8] << endl;
   cout << "Player2:"<< locationArrayP2[1] << locationArrayP2[2] << locationArrayP2[3] << locationArrayP2[4] << locationArrayP2[5] << locationArrayP2[6] << locationArrayP2[7] << locationArrayP2[8] << endl;
   cout << "" << endl;
