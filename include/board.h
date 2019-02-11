@@ -21,6 +21,9 @@ class Board{
     std::string getPlayerName(int player);
     void printFase1Information(int player);
     void printFase2Information(int player);
+    int generateSpaceshipSpot();  // DEBUGGING
+    void setSpaceshipDebug(int spaceshipID); // DEBUGGING
+    int pickPlanetDebug(int _size); // DEBUGGING
     void createPlayers(int _players);
     void setBodies(int _bodies);
     void printLocations();

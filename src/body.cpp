@@ -37,8 +37,7 @@ void Body::setSpaceshipOnPlanetVector(int _spaceshipID){
 }
 
 void Body::removeSpaceshipOffPlanetVector(int _spaceshipID){
-  // TODO: Make this work!
-  spaceshipVector = remove(spaceshipVector.begin(), spaceshipVector.end(), _spaceshipID);
+  spaceshipVector.erase(remove(spaceshipVector.begin(), spaceshipVector.end(), _spaceshipID), spaceshipVector.end());
 }
 
 void Body::printSpaceships(){

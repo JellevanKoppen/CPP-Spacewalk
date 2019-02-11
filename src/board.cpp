@@ -200,6 +200,121 @@ void Board::setSpaceship(int spaceshipID){
   }
 }
 
+// DEBUGGING
+int Board::pickPlanetDebug(int _size){
+  int answer = -1;
+  int index;
+  bool available;
+  int input = 1;
+  while (answer == -1){
+    for(int i = 0; i < bodies; i++){
+      if(bodyArray[i].getID() == input){
+       index = i;
+      }
+    }
+
+    if(turn == 1){
+      vector<int> spaceshipIDS = bodyArray[index].getSpaceships();
+      int spaceshipIDSSize = spaceshipIDS.size();
+      int size;
+      available = true;
+      for (int i = 0; i < spaceshipIDSSize; i++){
+        if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
+          size = player1.getSpaceshipSize(spaceshipIDS[i]);
+          if (size == _size){
+            available = false;
+          }
+        }
+      }
+    } else if (turn == 2){
+      vector<int> spaceshipIDS = bodyArray[index].getSpaceships();
+      int spaceshipIDSSize = spaceshipIDS.size();
+      int size;
+      available = true;
+      for (int i = 0; i < spaceshipIDSSize; i++){
+        if(spaceshipIDS[i] > 19){
+          size = player2.getSpaceshipSize(spaceshipIDS[i]);
+          if (size == _size){
+            available = false;
+          }
+        }
+      }
+    }
+    if (available){
+      return input;
+    } else {
+      input++;
+    }
+  }
+}
+
+// DEBUGGING
+void Board::setSpaceshipDebug(int spaceshipID){
+  int size = 0;
+  if(turn == 1){
+    player1.setSpaceshipStatus(true, spaceshipID);
+    size = player1.getSpaceshipSize(spaceshipID);
+  } else if (turn == 2){
+    player2.setSpaceshipStatus(true, spaceshipID);
+    size = player2.getSpaceshipSize(spaceshipID);
+  }
+  // Check op elke planeet of spaceship id binnen player range en van die size op planeet staat
+  int planetID = pickPlanetDebug(size);
+
+  // zet spaceship spaceshipID op planeet planetID
+  for (int i = 0; i < bodies; i++){
+    if (bodyArray[i].getID() == planetID){
+      bodyArray[i].setSpaceshipOnPlanetVector(spaceshipID);
+    }
+  }
+}
+
+// DEBUGGING
+int Board::generateSpaceshipSpot(){
+  string size;
+  int answer = -1;
+  while (answer == -1){
+    size = "l";
+    if(size == "l" || size == "L" || size == "Large" || size == "large" || size == "3" || size == "LARGE"){
+      if(turn == 1){
+        answer = player1.getAvailableSpaceship(3);
+      } else if (turn == 2){
+        answer = player2.getAvailableSpaceship(3);
+      } else {
+        cout << "Error it's no-ones turn!" << endl;
+      }
+    }
+    if(answer == -1){
+      size = "m";
+    }
+    if(size == "m" || size == "M" || size == "Medium" || size == "medium" || size == "2" || size == "MEDIUM"){
+      if(turn == 1){
+        answer = player1.getAvailableSpaceship(2);
+      } else if (turn == 2){
+        answer = player2.getAvailableSpaceship(2);
+      } else {
+        cout << "Error it's no-ones turn!" << endl;
+      }
+    }
+    if(answer == -1){
+      size = "s";
+    }
+    if(size == "s" || size == "S" || size == "Small" || size == "small" || size == "1" || size == "SMALL"){
+      if(turn == 1){
+        answer = player1.getAvailableSpaceship(1);
+      } else if (turn == 2){
+        answer = player2.getAvailableSpaceship(1);
+      } else {
+        cout << "Error it's no-ones turn!" << endl;
+      }
+    }
+    if(answer == -1){
+      cout << "You dont have that size spaceship left!" << endl;
+    }
+  }
+  return answer;
+}
+
 // Fase 1: Players place spacehips on board turn for turn.
 void Board::fase1(){
   while (fase1State){
@@ -222,9 +337,18 @@ void Board::fase1(){
     printFase1Information(turn);
     cout << "You have left: " << l << " large, " << m << " medium, and " << s << " small ships" << endl;
     // Laat speler kiezen uit een ruimteschip die nog niet op t board staat
+
+    /*DEBUGGING:
     int spaceshipID = pickSpaceship();
+    */
+
+    //DEBUGGING:
+    int spaceshipID = generateSpaceshipSpot();
+    setSpaceshipDebug(spaceshipID);
+    /* DEBUGGING:
     // Laat speler daarna kiezen op welke planeet dit ruimteschip komt
     setSpaceship(spaceshipID);
+    */
     if(turn == 1){
       turn = 2;
     } else if(turn == 2){
@@ -258,6 +382,7 @@ int Board::makeDecisionForPlayer(){
 void Board::moveSpaceship(int planetID, int spaceshipID){
   for (int i = 0; i < bodies; i++){
     if (bodyArray[i].getID() == planetID){
+      cout << "Setting spaceship " << spaceshipID << " on planet: " << bodyArray[i].getID() << endl;
       bodyArray[i].setSpaceshipOnPlanetVector(spaceshipID);
     }
   }
@@ -335,13 +460,14 @@ void Board::moveSpaceships(int planetID){
           //Check elke planeet voor een spaceship
           if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0){
             if(player1.getSpaceshipSize(spaceshipIDS[i]) == 3){
-              int toMove = spaceshipIDS[i];
+              toMove = spaceshipIDS[i];
+              //cout << "To Move: " << toMove << endl;
               break;
             }
           }
         }
-        moveSpaceship(bodyArray[index+steps].getID(), toMove);
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
         steps++;
         largeSizeP1--;
       }
@@ -351,13 +477,17 @@ void Board::moveSpaceships(int planetID){
           //Check elke planeet voor een spaceship
           if(spaceshipIDS[i] > 19){
             if(player2.getSpaceshipSize(spaceshipIDS[i]) == 3){
-              int toMove = spaceshipIDS[i];
+              toMove = spaceshipIDS[i];
               break;
             }
           }
         }
-        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        cout << "PlanetID: " << bodyArray[index+steps].getID() << endl;
+        cout << "To Move: " << toMove << endl;
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        cout << "Got here!" << endl;
+        moveSpaceship(bodyArray[index+steps].getID(), toMove);
+        cout << "Got here! too" << endl;
         steps++;
         largeSizeP2--;
       }
@@ -431,6 +561,7 @@ void Board::fase2(){
   cout << "Select a planet to move all the spaceships" << endl;
   cout << endl;
   while (fase2State){
+    //system("clear");
     printFase2Information(turn);
 
     //Speler die aan de beurt is mag een planeet kiezen
