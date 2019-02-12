@@ -97,7 +97,7 @@ void Board::printFase1Information(int player){
      cout << endl;
      if(!cin.good()){
        cin.clear();
-       cin.ignore(INT8_MAX, '\n');
+       cin.ignore();
        continue;
      }
 
@@ -323,6 +323,14 @@ int Board::generateSpaceshipSpot(){
 
 // Fase 1: Players place spacehips on board turn for turn.
 void Board::fase1(){
+  clear();
+  cout << "Welcome to SpaceWalk!" << endl;
+  cout << "You have 3 small, big and medium sized spaceships." << endl;
+  cout << "Phase one will now begin. Place your spaceships on the board" << endl;
+  cout << "one by one." << endl;
+  cout << endl;
+  cout << "Press any key to start..." << endl;
+  system("read");
   while (fase1State){
     int s = 0, m = 0, l = 0;
     if(turn == 1){
@@ -474,10 +482,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -497,10 +506,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -525,10 +535,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -548,10 +559,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -582,10 +594,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -605,10 +618,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -633,10 +647,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -656,10 +671,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -691,10 +707,11 @@ void Board::moveSpaceships(int planetID){
         }
         // ERROR: This does not remove it from the current vector!!!!
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -714,10 +731,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -742,10 +760,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -765,10 +784,11 @@ void Board::moveSpaceships(int planetID){
           }
         }
         bodyArray[index].removeSpaceshipOffPlanetVector(toMove);
+        spaceshipIDS = bodyArray[index].getSpaceships();
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -16;
+          steps = -17;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -792,6 +812,7 @@ int Board::selectPlanet(){
     cout << endl;
     if(!cin.good()){
       cin.clear();
+      cin.ignore();
       continue;
     }
 
@@ -840,13 +861,21 @@ void Board::printFase2Information(int player){
 
 // Fase 1: Players take turn to move spaceships
 void Board::fase2(){
+  clear();
   fase2State = true;
   cout << "Well Done!" << endl;
-  cout << "Lets begin phase2" << endl;
-  cout << "Select a planet to move all the spaceships" << endl;
+  cout << "Lets begin phase two!" << endl;
+  cout << "Select a planet to move all the spaceships on that planet." << endl;
+  cout << "Try to fly the other players' spaceships into the black holes!" << endl;
+  cout << "Large spaceships will always travel the shortest distance." << endl;
+  cout << "When two spaceships of the same size, but from different players, are on the planet" << endl;
+  cout << "you can choose which spaceship has to travel first (which will be one planet closer)." << endl;
+  cout << "Avoid the black holes and have fun!" << endl;
   cout << endl;
+  cout << "Press any key to continue..." << endl;
+  system("read");
   while (fase2State){
-    //system("clear");
+    clear();
     printFase2Information(turn);
 
     //Speler die aan de beurt is mag een planeet kiezen
