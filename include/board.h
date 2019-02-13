@@ -28,18 +28,26 @@ class Board{
     void createPlayers(int _players);
     void setBodies(int _bodies);
     void printLocations();
+    void winner();
+    int useCoin();
     void printSpaceshipLocations();
     void getLocations();
+    void calculateScore();
+    int getScore(int player);
     Board(int _players);
     ~Board();
     void printBoard();
     void printStats();
+    void destroySpaceship(int player);
   private:
     Player player1;
     Player player2;
+    bool finished;
+    bool coinUsed;
+    bool player1UsedCoin;
+    bool player2UsedCoin;
     int nOfSpaceshipsOnBoard;
     bool fase1State;
-    bool hopped;
     bool fase2State;
     int bodies;
     int turn;

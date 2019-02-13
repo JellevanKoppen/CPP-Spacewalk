@@ -15,6 +15,7 @@ class Player {
     int getAvailableSpaceship(int size);
     void setSpaceshipStatus(bool state, int spaceshipID);
     int getNOfSpaceships();
+    void setNOfSpaceships(int nr);
     int getNrOfUnplacedSpaceships(int size);
     void createSpaceships();
     void setFiches(int _fiches);
@@ -22,6 +23,8 @@ class Player {
     int getSpaceshipID(int index);
     void setName(std::string _name);
     std::string getName();
+    int getScore();
+    void setScore(int _score);
     void printName();
     Player(std::string _name);
     Player(int _startID);
@@ -29,6 +32,7 @@ class Player {
 
   private:
     std::string name;
+    int score;
     int startID;
     int fiches;
     int nOfSpaceships;

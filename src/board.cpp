@@ -10,7 +10,8 @@ Board::Board(int _players) : player1(10), player2(20) {
   cout << "Generating board" << endl;
   fase1State = true;
   fase2State = false;
-  hopped = false;
+  coinUsed = false;
+  finished = false;
   turn = 1;
   previousturn = turn;
   players = _players;
@@ -75,6 +76,128 @@ void Board::createBoard(){
 
 void Board::clear(){
   system("clear");
+  cout << endl;
+}
+
+int Board::getScore(int player){
+  if(player == 1){
+    return player1.getScore();
+  } else if (player == 2){
+    return player2.getScore();
+  }
+}
+
+void Board::calculateScore(){
+  int scoreP1;
+  int scoreP2;
+  bool p1Lost = false;
+  bool p2Lost = false;
+  /*
+  groot ruimteschip: 4 punten;
+  midelgroot ruimteschip: 3 punten;
+  klein ruimteschip: 1 punten;
+  niet-ingezette ruimtefiches: 2 punten.
+  */
+  if(player1.getNOfSpaceships() == 0){
+    p1Lost = true;
+  } else if(player2.getNOfSpaceships() == 0){
+    p2Lost = true;
+  }
+  for (int i = 0; i < bodies; i++){
+    if(bodyArray[i].getID() < 1){
+      continue;
+    }
+    int player = 0;
+    int size = 0;
+    vector<int> spaceshipIDS = bodyArray[i].getSpaceships();
+    for (int i = 0; i < spaceshipIDS.size(); i++){
+      if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0 && !p1Lost){
+        player = 1;
+        size = player1.getSpaceshipSize(spaceshipIDS[i]);
+      } else if (spaceshipIDS[i] > 19 && !p2Lost){
+        player = 2;
+        size = player2.getSpaceshipSize(spaceshipIDS[i]);
+      } else {
+        size = 0;
+      }
+      if (size == 1 && player == 1){
+        scoreP1 += 1;
+      } else if(size == 2 && player == 1){
+        scoreP1 += 3;
+      } else if(size == 3 && player == 1){
+        scoreP1 += 4;
+      } else if (size == 1 && player == 2){
+        scoreP2 += 1;
+      } else if(size == 2 && player == 2){
+        scoreP2 += 3;
+      } else if(size == 3 && player == 2){
+        scoreP2 += 4;
+      } else if (size == 0){
+        continue;
+      } else {
+        cout << "Error: Spaceshipsize not found" << endl;
+      }
+    }
+  }
+  int fichesP1 = player1.getFiches();
+  int fichesP2 = player2.getFiches();
+  scoreP1 += (fichesP1 * 2);
+  scoreP2 += (fichesP2 * 2);
+  player1.setScore(scoreP1);
+  player2.setScore(scoreP2);
+}
+
+void Board::winner(){
+  calculateScore();
+  int scoreP1 = getScore(1);
+  int scoreP2 = getScore(2);
+
+  clear();
+  string playerName;
+  if(scoreP1 > scoreP2){
+    cout << "Congratulations!" << endl;
+    playerName = getPlayerName(1);
+    cout << playerName << " has won the game with " << scoreP1 << " points!" << endl;
+    cout << endl;
+    cout << endl;
+    playerName = getPlayerName(2);
+    cout << playerName << " came second with " << scoreP2 << " points..." << endl;
+  } else if(scoreP1 < scoreP2){
+    cout << "Congratulations!" << endl;
+    playerName = getPlayerName(2);
+    cout << playerName << " has won the game with " << scoreP2 << " points!" << endl;
+    cout << endl;
+    cout << endl;
+    playerName = getPlayerName(1);
+    cout << playerName << " came second with " << scoreP1 << " points..." << endl;
+  } else if(scoreP1 == scoreP2){
+    cout << "Its a draw!" << endl;
+    playerName = getPlayerName(1);
+    cout << playerName << " has a score of " << scoreP1 << " points!" << endl;
+    playerName = getPlayerName(2);
+    cout << playerName << " has a score of " << scoreP2 << " points!" << endl;
+  }
+  cout << endl;
+  cout << "Restart the game to try again" << endl;
+  system("read");
+}
+
+void Board::destroySpaceship(int player){
+  if(player == 1){
+    int nOfSpaceships = player1.getNOfSpaceships();
+    nOfSpaceships--;
+    player1.setNOfSpaceships(nOfSpaceships);
+    if(nOfSpaceships <= 0){
+      finished = true;
+    }
+  } else if (player == 2){
+    int nOfSpaceships = player2.getNOfSpaceships();
+    nOfSpaceships--;
+    player2.setNOfSpaceships(nOfSpaceships);
+    if(nOfSpaceships <= 0){
+      finished = true;
+    }
+  }
 }
 
 void Board::printFase1Information(int player){
@@ -371,6 +494,63 @@ void Board::fase1(){
   }
 }
 
+int Board::useCoin(){
+  clear();
+  cout << "Welcome to the coin selection menu" << endl;
+  cout << "Type the number of the scenario for which you want to use the coin" << endl;
+  cout << "Type any other number to cancel this selection" << endl;
+  cout << endl;
+  if(turn == 1){
+    cout << "1: Would player 2 like to player again?" << endl; // Costs player 2 a coin (input = 1)
+    cout << "2: Would player 1 like to skip a turn?" << endl; // Costs player 1 a coin (input = 2)
+    cout << "3: Would player 2 like to move 1 other spaceship?" << endl; // Costs player 2 a coin (input = 3)
+  } else if (turn == 2){
+    cout << "1: Would player 1 like to player again?" << endl; // Costs player 1 a coin (input = 11)
+    cout << "2: Would player 2 like to skip a turn?" << endl; // Costs player 2 a coin (input = 12)
+    cout << "3: Would player 1 like to move 1 other spaceship?" << endl; // Costs player 1 a coin (input = 13)
+  }
+  int answer = -1;
+  while (answer == -1){
+    int input;
+    cout << "Make a choice: ";
+    cin >> input;
+    cout << endl;
+    if(!cin.good()){
+      cin.clear();
+      cin.ignore();
+      continue;
+    }
+    if(input == 1 || input == 2 || input == 3){
+      coinUsed = true;
+      if(turn == 2){
+        input += 10;
+      }
+      if(input == 2 || input == 11 || input == 13){
+        int fiches = player1.getFiches();
+        if(fiches > 0){
+          return input;
+        } else {
+          cout << "Player 1 does not have enough coins to make this purchase!" << endl;
+          coinUsed = false;
+          input = -1;
+        }
+      } else if(input == 1 || input == 3 || input == 12){
+        int fiches = player2.getFiches();
+        if(fiches > 0){
+          return input;
+        } else {
+          cout << "Player 2 does not have enough coins to make this purchase!" << endl;
+          coinUsed = false;
+          input = -1;
+        }
+      }
+    } else if(input != -1){
+      coinUsed = false;
+      return -1;
+    }
+  }
+}
+
 int Board::makeDecisionForPlayer(){
   string player;
   int answer = -1;
@@ -395,6 +575,13 @@ int Board::makeDecisionForPlayer(){
 
 void Board::moveSpaceship(int planetID, int spaceshipID){
   // Move the spaceships on the planet. planetID -9 and -17 = black hole.
+  if(planetID <= 0){
+    if(spaceshipID < 20 && spaceshipID != 0){
+      destroySpaceship(1);
+    } else if (spaceshipID > 19){
+      destroySpaceship(2);
+    }
+  }
   for (int i = 0; i < bodies; i++){
     if (bodyArray[i].getID() == planetID){
       cout << "Setting spaceship " << spaceshipID << " on planet: " << bodyArray[i].getID() << endl;
@@ -804,6 +991,7 @@ int Board::selectPlanet(){
   printBoard();  // Laat het bord zien
   int answer = -1;
   int index;
+  int coin = -1;
   bool available;
   while (answer == -1){
     int input;
@@ -816,8 +1004,21 @@ int Board::selectPlanet(){
       continue;
     }
 
-    if(input < 1 || input > 16 ){
+    if(input < -1 || input == 0 || input > 16 ){
       continue;
+    }
+
+    if(input == -1){
+      coin = useCoin();
+    }
+
+    if(coin != -1){
+      cout << "Returning because of coin!" << endl;
+      return coin;
+    } else {
+      clear();
+      printFase2Information(turn);
+      printBoard();
     }
 
     for(int i = 0; i < bodies; i++){
@@ -856,6 +1057,10 @@ int Board::selectPlanet(){
 void Board::printFase2Information(int player){
   string playerName = getPlayerName(player);
   cout << "It's " << playerName << "'s turn.." << endl;
+  cout << endl;
+  cout << "Score:" << endl;
+  printStats();
+  cout << endl;
   cout << "Select a planet by typing its ID: (Numbers: 1-16)" << endl;
 }
 
@@ -870,17 +1075,41 @@ void Board::fase2(){
   cout << "Large spaceships will always travel the shortest distance." << endl;
   cout << "When two spaceships of the same size, but from different players, are on the planet" << endl;
   cout << "you can choose which spaceship has to travel first (which will be one planet closer)." << endl;
+  cout << "You will begin with 4 space coins these will be available in the following moments:" << endl;
+  cout << "1. Directly after your turn you can use a spacecoin to get another turn straight after your own" << endl;
+  cout << "2. Directly after your turn you can use a spacecoin to move one of your spaceships 1 planet forwards" << endl;
+  cout << "3. Instead of playing, you can use a spacecoin to skip your turn" << endl;
+  cout << "You can acces the coin selection menu by typing in -1 in the beginning of a turn" << endl;
   cout << "Avoid the black holes and have fun!" << endl;
   cout << endl;
   cout << "Press any key to continue..." << endl;
   system("read");
-  while (fase2State){
+  while (fase2State && finished == false){
     clear();
     printFase2Information(turn);
 
     //Speler die aan de beurt is mag een planeet kiezen
     int planetID = selectPlanet();
-    moveSpaceships(planetID);
+    if(coinUsed){
+      cout << "coinUsed = True!" << endl;
+      int fiches;
+      coinUsed = false;
+      if(planetID == 2 || planetID == 11 || planetID == 13){
+        fiches = player1.getFiches();
+        fiches--;
+        player1.setFiches(fiches);
+      } else if (planetID == 1 || planetID == 3 || planetID == 12){
+        fiches = player2.getFiches();
+        fiches--;
+        player2.setFiches(fiches);
+      }
+      if(planetID == 13 || planetID == 3){
+        // Special Round!
+        cout << "Special Round" << endl;
+      }
+    } else {
+      moveSpaceships(planetID);
+    }
 
     if(turn == 1){
       turn = 2;
@@ -888,6 +1117,7 @@ void Board::fase2(){
       turn = 1;
     }
   }
+  winner();
 }
 
 void Board::printLocations(){
@@ -995,5 +1225,4 @@ void Board::printStats(){
     cout << "Player 2" << endl;
     cout << "Fleet: " << player2.getNOfSpaceships() << endl;
     cout << "Space Coins: " << player2.getFiches() << endl;
-    cout << "" << endl;
 }

@@ -6,7 +6,8 @@ using namespace std;
 Player::Player(string _name){
   name = _name;
   nOfSpaceships = 9;
-  fiches = 5;
+  fiches = 4;
+  score = 0;
   cout << "Hey " << name << endl;
   cout << "Creating spaceships for " << name << endl;
   spaceshipArray = (Spaceship*) calloc(sizeof(Spaceship), 9);
@@ -16,7 +17,8 @@ Player::Player(string _name){
 Player::Player(int _startID){
   startID = _startID;
   nOfSpaceships = 9;
-  fiches = 5;
+  fiches = 4;
+  score = 0;
   spaceshipArray = (Spaceship*) calloc(sizeof(Spaceship), 9);
   spaceshipArray= new Spaceship[9];
   createSpaceships();
@@ -32,6 +34,10 @@ int Player::getSpaceshipID(int index){
 
 int Player::getNOfSpaceships(){
   return nOfSpaceships;
+}
+
+void Player::setNOfSpaceships(int nr){
+  nOfSpaceships = nr;
 }
 
 int Player::getSpaceshipLocation(int spaceshipID){
@@ -56,6 +62,8 @@ int Player::getNrOfUnplacedSpaceships(int size){
   }
   return total;
 }
+
+
 
 int Player::getSpaceshipSize(int spaceshipID){
   for (int i = 0; i < 9; i++){
@@ -88,6 +96,14 @@ void Player::setFiches(int _fiches){
 
 int Player::getFiches(){
   return fiches;
+}
+
+void Player::setScore(int _score){
+  score = _score;
+}
+
+int Player::getScore(){
+  return score;
 }
 
 void Player::createSpaceships(){
