@@ -18,7 +18,6 @@ class Spaceship{
   private:
     int size;
     int location;
-    char const* sizeText;
     bool onBoard;
     int id;
 };

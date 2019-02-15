@@ -110,41 +110,46 @@ void Board::calculateScore(){
     int player = 0;
     int size = 0;
     vector<int> spaceshipIDS = bodyArray[i].getSpaceships();
-    for (int i = 0; i < spaceshipIDS.size(); i++){
-      if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0 && !p1Lost){
-        player = 1;
-        size = player1.getSpaceshipSize(spaceshipIDS[i]);
-      } else if (spaceshipIDS[i] > 19 && !p2Lost){
-        player = 2;
-        size = player2.getSpaceshipSize(spaceshipIDS[i]);
-      } else {
-        size = 0;
-      }
-      if (size == 1 && player == 1){
-        scoreP1 += 1;
-      } else if(size == 2 && player == 1){
-        scoreP1 += 3;
-      } else if(size == 3 && player == 1){
-        scoreP1 += 4;
-      } else if (size == 1 && player == 2){
-        scoreP2 += 1;
-      } else if(size == 2 && player == 2){
-        scoreP2 += 3;
-      } else if(size == 3 && player == 2){
-        scoreP2 += 4;
-      } else if (size == 0){
-        continue;
-      } else {
-        cout << "Error: Spaceshipsize not found" << endl;
+    if(spaceshipIDS.size() == 0){
+      continue;
+    } else {
+      for (int i = 0; i < spaceshipIDS.size(); i++){
+        if(spaceshipIDS[i] < 20 && spaceshipIDS[i] != 0 && !p1Lost){
+          player = 1;
+          size = player1.getSpaceshipSize(spaceshipIDS[i]);
+        } else if (spaceshipIDS[i] > 19 && !p2Lost){
+          player = 2;
+          size = player2.getSpaceshipSize(spaceshipIDS[i]);
+        } else {
+          size = 0;
+        }
+        if (size == 1 && player == 1){
+          scoreP1 += 1;
+        } else if(size == 2 && player == 1){
+          scoreP1 += 3;
+        } else if(size == 3 && player == 1){
+          scoreP1 += 4;
+        } else if (size == 1 && player == 2){
+          scoreP2 += 1;
+        } else if(size == 2 && player == 2){
+          scoreP2 += 3;
+        } else if(size == 3 && player == 2){
+          scoreP2 += 4;
+        } else if (size == 0){
+          continue;
+        } else {
+          cout << "Error: Spaceshipsize not found" << endl;
+        }
       }
     }
   }
   int fichesP1 = player1.getFiches();
   int fichesP2 = player2.getFiches();
-  scoreP1 += (fichesP1 * 2);
-  scoreP2 += (fichesP2 * 2);
+  scoreP1 = scoreP1 + fichesP1 * 2;
+  scoreP2 = scoreP2 + fichesP2 * 2;
   player1.setScore(scoreP1);
   player2.setScore(scoreP2);
+  cout << "Setting scores: P1 " << scoreP1 << ", P2 " << scoreP2 << endl;
 }
 
 void Board::winner(){
@@ -202,6 +207,7 @@ void Board::destroySpaceship(int player){
 
 void Board::printFase1Information(int player){
   string playerName = getPlayerName(player);
+  clear();
   cout << "It's " << playerName << "'s turn.." << endl;
   cout << "Select a spaceship by typing it's size: L(arge),M(edium),S(mall)" << endl;
   //cout << "Next name a planet to place the spaceship on: (Numbers: 1-16)" << endl;
@@ -474,17 +480,14 @@ void Board::fase1(){
     printFase1Information(turn);
     cout << "You have left: " << l << " large, " << m << " medium, and " << s << " small ships" << endl;
     // Laat speler kiezen uit een ruimteschip die nog niet op t board staat
-
-    /*DEBUGGING:
     int spaceshipID = pickSpaceship();
-    */
-
+    setSpaceship(spaceshipID);
+    /*
     //DEBUGGING:
     int spaceshipID = generateSpaceshipSpot();
     setSpaceshipDebug(spaceshipID);
-    /* DEBUGGING:
+     DEBUGGING:
     // Laat speler daarna kiezen op welke planeet dit ruimteschip komt
-    setSpaceship(spaceshipID);
     */
     if(turn == 1){
       turn = 2;
@@ -673,7 +676,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -697,7 +700,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -726,7 +729,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -750,7 +753,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -785,7 +788,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -809,7 +812,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -838,7 +841,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -862,7 +865,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -898,7 +901,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -922,7 +925,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -951,7 +954,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -975,7 +978,7 @@ void Board::moveSpaceships(int planetID){
         // Test
         if(index+steps > 17){
           cout << "Steps was: " << steps << endl;
-          steps = -17;
+          steps = -1* index;
           cout << "Steps is now: " << steps << endl;
           cout << "So index+steps =" << index+steps << endl;
         }
@@ -1091,7 +1094,6 @@ void Board::fase2(){
     //Speler die aan de beurt is mag een planeet kiezen
     int planetID = selectPlanet();
     if(coinUsed){
-      cout << "coinUsed = True!" << endl;
       int fiches;
       coinUsed = false;
       if(planetID == 2 || planetID == 11 || planetID == 13){
